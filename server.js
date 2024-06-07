@@ -90,7 +90,7 @@ app.get("/park/get-lot-info", async (req, res) => {
         available,
         cleaning,
         suspension,
-        level,
+        level,u_id,
         l_uid
       FROM "Parkingsystem"."Lot"
       WHERE
