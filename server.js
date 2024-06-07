@@ -94,7 +94,7 @@ app.get("/park/get-lot-info", async (req, res) => {
         l_uid
       FROM "Parkingsystem"."Lot"
       WHERE
-        u_id = $1
+        l_uid = $1
       LIMIT 1;
       `,
       [lotId]
