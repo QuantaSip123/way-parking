@@ -163,3 +163,33 @@ app.get("/park/get-plot-info", async (req, res) => {
     res.status(500).json({ message: "Internal server error." });
   }
 });
+
+app.put("/park/update-occupied", async (req, res) => {
+  const { lot, occupied } = req.query;
+
+  if (typeof lot === "undefined" || typeof occupied === "undefined") {
+    return res
+      .status(400)
+      .json({ message: "Invalid request, missing 'lot' or 'occupied' field." });
+  }
+
+  try {
+    const query = `
+      UPDATE "Parkingsystem"."Lot"
+      SET occupied = $1
+      WHERE id = $2
+    `;
+    const values = [occupied === "true", lot]; // Convert 'occupied' to boolean
+
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Lot not found." });
+    }
+
+    res.status(200).json({ message: "Occupied status updated successfully." });
+  } catch (error) {
+    console.error("Error updating occupied status:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
